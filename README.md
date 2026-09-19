@@ -8,8 +8,8 @@ The emphasis is on detection logic and its limits, not on tool deployment.
 
 ## Projects
 
-| # | Project | Techniques | Status |
-|---|---------|-----------|--------|
+| # | Project | Techniques |
+|---|---------|-----------|
 | 01 | [AD Telemetry Pipeline & Discovery Detection](./01-ad-telemetry-discovery/) | T1087.002, T1069.002 |
 | 02 | Adversary Emulation & Attack Path Mapping | Atomic Red Team, BloodHound |
 | 03 | False Positive Tuning | Baseline analysis, rule refinement |
@@ -19,8 +19,6 @@ The emphasis is on detection logic and its limits, not on tool deployment.
 ---
 
 ## Environment
-
-```
 
 **Domain:** `soc.lab` — one DC, two workstations, five users, two nested groups
 **Endpoint telemetry:** Sysmon (SwiftOnSecurity config), Windows Security / System / PowerShell channels
