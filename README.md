@@ -1,6 +1,6 @@
 # Detection Engineering Lab
 
-Hands-on detection engineering against a purpose-built Active Directory environment. Each project runs a technique, attempts to detect it, and documents what the telemetry actually showed
+Hands-on detection engineering against a purpose-built Active Directory environment. Each project runs a technique, attempts to detect it, and documents what the telemetry actually showed.
 
 The emphasis is on detection logic and its limits, not on tool deployment.
 
@@ -20,10 +20,10 @@ The emphasis is on detection logic and its limits, not on tool deployment.
 
 ## Environment
 
-**Domain:** `soc.lab` — one DC, two workstations, five users, two nested groups
-**Endpoint telemetry:** Sysmon (SwiftOnSecurity config), Windows Security / System / PowerShell channels
-**Policy:** PowerShell Script Block Logging, command-line auditing in 4688, and advanced audit subcategories enforced by GPO at the domain root
-**SIEM:** Splunk Enterprise with `Splunk_TA_windows` and `Splunk_TA_microsoft_sysmon`
+**Domain:** `soc.lab` — one DC, two workstations, five users, two nested groups  
+**Endpoint telemetry:** Sysmon (SwiftOnSecurity config), Windows Security / System / PowerShell channels  
+**Policy:** PowerShell Script Block Logging, command-line auditing in 4688, and advanced audit subcategories enforced by GPO at the domain root  
+**SIEM:** Splunk Enterprise with `Splunk_TA_windows` and `Splunk_TA_microsoft_sysmon`  
 
 The SIEM runs on **separate physical hardware** rather than as a VM on the same host. Forwarders therefore cross a real network boundary, which matches production topology and surfaces connectivity failures that a same-host setup hides.
 
