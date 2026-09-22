@@ -1,0 +1,46 @@
+title: Kerberoasting - Successful RC4 Service Ticket Request (Baseline / FP Demonstration)
+id: 072dd4e7-d002-43f5-8afd-ffa2fda6e2ef
+status: experimental
+
+description: |
+  Detects a SUCCESSFUL Kerberos service ticket request (4769) using RC4
+  (etype 0x17). This matches the successful Kerberoasting roast against an
+  RC4-only service account.
+
+  IMPORTANT — this rule is a DELIBERATELY NAIVE BASELINE, not a deployable
+  detection.
+
+  For a lower-FP version, allow-list the known RC4-only accounts and alert on
+  successful RC4 to anything else (see README Tuning) — at the cost of
+  maintaining that allow-list. For the patient single-ticket roast of a
+  legitimately-RC4 account, no signature suffices; that requires behavioral
+  baselining.
+  
+references:
+  - https://attack.mitre.org/techniques/T1558/003/
+  - https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4769
+
+author: Waleed
+date: 2026-09-22
+
+tags:
+  - attack.credential_access
+  - attack.t1558.003
+
+logsource:
+  product: windows
+  service: security
+
+detection:
+  selection:
+    EventID: 4769
+    Ticket_Encryption_Type: '0x17'   # RC4-HMAC
+  filter_failures:
+    Failure_Code: '0x0'
+  condition: selection and filter_failures
+
+falsepositives:
+  - EXPECTED AND SUBSTANTIAL. Fires on all legitimate RC4 service usage,
+    including genuinely RC4-only service accounts. This is the point of the
+    rule — it is not deployable as-is.
+level: informational

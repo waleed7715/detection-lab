@@ -1,0 +1,39 @@
+title: Kerberoasting - RC4 Encryption Downgrade Refused (ETYPE_NOSUPP)
+id: e3a5d3aa-4ad2-4352-a555-ee959a564c4d
+status: test
+
+description: |
+  Detects a Kerberos service ticket request (4769) that FAILED because the
+  requested encryption type is not supported by the target account. A request
+  for RC4 (etype 0x17) against an account configured for AES only produces
+  KDC_ERR_ETYPE_NOSUPP (0xe), logged with Ticket_Encryption_Type 0xffffffff
+  (no ticket issued).
+  
+references:
+  - https://attack.mitre.org/techniques/T1558/003/
+  - https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4769
+
+author: Waleed
+date: 2026-09-21
+
+tags:
+  - attack.credential_access
+  - attack.t1558.003
+
+logsource:
+  product: windows
+  service: security
+
+detection:
+  selection:
+    EventID: 4769
+    Ticket_Encryption_Type: '0xffffffff'
+    Failure_Code: '0xe'
+  condition: selection
+
+falsepositives:
+  - A legitimate client requesting an encryption type the target account
+    does not support (e.g. after an account's supported-etypes were tightened
+    while an old client persists). Investigate the requesting account and
+    target SPN — low volume, high signal.
+level: high

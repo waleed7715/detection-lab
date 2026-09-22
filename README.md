@@ -11,7 +11,7 @@ The emphasis is on detection logic and its limits, not on tool deployment.
 | # | Project | Techniques |
 |---|---------|-----------|
 | 01 | [AD Telemetry Pipeline & Discovery Detection](./01-ad-telemetry-discovery/) | T1087.002, T1069.002 |
-| 02 | Adversary Emulation & Attack Path Mapping | Atomic Red Team, BloodHound |
+| 02 | [Adversary Emulation & Attack Path Mapping](./02-adversary-emulation/) | Atomic Red Team, BloodHound |
 | 03 | False Positive Tuning | Baseline analysis, rule refinement |
 | 04 | Malware Analysis & Rule Authoring | YARA, Sigma, static/dynamic analysis |
 | 05 | Network Detection | Zeek, Suricata, C2 identification |
