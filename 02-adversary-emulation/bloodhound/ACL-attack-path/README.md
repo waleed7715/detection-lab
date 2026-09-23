@@ -2,35 +2,34 @@
 
 **Technique:** Abuse of ACL / delegated rights (ForceChangePassword) —
 [T1098](https://attack.mitre.org/techniques/T1098/) (Account Manipulation),
-[T1078.002](https://attack.mitre.org/techniques/T1078/002/) (Valid Accounts: Domain Accounts)
-**Tactic:** Privilege Escalation / Persistence
-**Attacker position:** Unprivileged domain user (`SOC\jsmith`), member of Helpdesk
-**Tooling:** BloodHound (discovery), net rpc / Samba (exploitation), Splunk (detection)
+[T1078.002](https://attack.mitre.org/techniques/T1078/002/) (Valid Accounts: Domain Accounts)  
+**Tactic:** Privilege Escalation / Persistence  
+**Attacker position:** Unprivileged domain user (`SOC\jsmith`), member of Helpdesk  
+**Tooling:** BloodHound (discovery), net rpc / Samba (exploitation), Splunk (detection)  
 
 ---
 
 ## Summary
 
 A misconfigured delegation — the Helpdesk group granted `ForceChangePassword`
-over another account — lets an unprivileged helpdesk user reset that account's
+over another account lets an unprivileged helpdesk user reset that account's
 password without knowing the current one, and log in as it. This lab plants
 that misconfiguration, discovers the resulting attack path in BloodHound,
 exploits it, and detects the exploitation in Splunk.
 
-**Two findings, and the second is the more interesting one:**
+**Two findings:**
 
 1. **The path works against a normal account.** jsmith (Helpdesk, unprivileged)
    → `ForceChangePassword` → `svc-report` → password reset → account takeover.
    Detected via event 4724.
 
-2. **The same path was DENIED against a Domain Admin — and BloodHound didn't
-   know.** The identical misconfiguration was first planted on a Domain Admin
+2. **The same path was DENIED against a Domain Admin.** The identical misconfiguration was first planted on a Domain Admin
    account (`dadmin`). BloodHound displayed the path to it, but the exploit was
    refused (`Access is denied`). Root cause: `dadmin` is protected by
    **AdminSDHolder / SDProp** (`adminCount=1`), which overrides delegated rights
    on privileged accounts. BloodHound reads the ACE and draws the edge, but the
-   domain does not honour it. **A path in the graph is not proof the path is
-   walkable.**
+   domain does not honour it. A path in the graph is not proof the path is
+   walkable.
 
 ---
 
@@ -41,7 +40,7 @@ team given the ability to reset passwords. `ForceChangePassword` is the extended
 right that permits resetting an account's password *without* knowing the current
 one. When such delegation is scoped too broadly (a very common real-world
 misconfiguration), a low-privilege group ends up able to take over accounts it
-should not — and if one of those accounts is privileged, that is a direct
+should not, and if one of those accounts is privileged, that is a direct
 escalation path. BloodHound exists precisely to surface these relationships as
 graph edges.
 
@@ -50,19 +49,23 @@ graph edges.
 ## The misconfiguration (plant)
 
 Granted the **Helpdesk group** the `ForceChangePassword` extended right
-(GUID `00299570-246d-11d0-a768-00aa006e0529`) over a target account. Because
+(GUID `00299570-246d-11d0-a768-00aa006e0529`) over a target account using [plant misconfig script](scripts/plant-misconfig.ps1). Because
 `jsmith` is a Helpdesk member, jsmith inherits the right.
 
 Two targets were used, deliberately:
 - `dadmin` — a Domain Admin (to test the path to full domain compromise)
 - `svc-report` — a non-privileged service account (the working demonstration)
 
+![Placing the misconfiguration](../images/placing-misconfig.png)
 ---
 
 ## Discovery (BloodHound)
 
 Before the plant, BloodHound showed **no path** from jsmith to Domain Admins —
-a correctly configured baseline. *(`clean-baseline.png`, `domain-topology.png`)*
+a correctly configured baseline (the shortest-path-to-DA query returned no
+results). The domain topology at this point:
+
+![Domain Topology](../images/benign-graph.png)
 
 After the plant and re-collection (`bloodhound-python -c All,ACL`), the path
 rendered:
@@ -70,13 +73,10 @@ rendered:
 ```
 jsmith --MemberOf--> Helpdesk --ForceChangePassword--> [target]
 ```
-*(`attack-path.png`)* BloodHound's Linux abuse panel documents the exploitation
-method directly. *(`linux-abuse-info.png`)*
+BloodHound's Linux abuse panel (shown alongside the path) documents the
+exploitation method directly.
 
-> Collection note: `-c All` alone did not reliably include ACL edges; ACLs had
-> to be requested explicitly (`-c All,ACL`), and the database cleared and
-> re-imported, before the `ForceChangePassword` edge appeared. A stale import
-> silently shows nodes without their ACL relationships.
+![Misconfiguration path from jsmith to dadmin](../images/misconfig-path.png)
 
 ---
 
@@ -88,7 +88,9 @@ method directly. *(`linux-abuse-info.png`)*
 net rpc password dadmin '<newpass>' -U 'soc.lab/jsmith%<pw>' -S dc01.soc.lab
 # Failed to set password for 'dadmin' with error: Access is denied.
 ```
-*(`dadmin-denied.png`)*
+*(`failed-dadmin.png`)*
+
+![Failed dadmin password change](../images/failed-dadmin.png)
 
 BloodHound showed this path, but it does not work. **Root cause — AdminSDHolder /
 SDProp.** `dadmin` is a member of Domain Admins, a protected group. The SDProp
@@ -111,7 +113,10 @@ The identical right over a non-protected account is honoured:
 net rpc password svc-report '<newpass>' -U 'soc.lab/jsmith%<pw>' -S dc01.soc.lab
 # success
 ```
-*(`password-reset.png`)* jsmith — an unprivileged helpdesk user — has taken
+
+![Changing the password of svc-report](../images/changing-password-jsmith.png)
+
+jsmith; an unprivileged helpdesk user; has taken
 over `svc-report` using only the delegated right, without knowing its previous
 password. Kill chain complete for the non-protected case.
 
@@ -127,7 +132,9 @@ password). The signal is *who reset whom*:
 index=wineventlog EventCode=4724
 | table _time, Account_Name, Target_User_Name
 ```
-Shows `jsmith` resetting `svc-report`. *(`4724-detection.png`)*
+Shows `jsmith` resetting `svc-report`.
+
+![Event 4724](../images/event-4724.png)
 
 **The detection logic:** a 4724 where the actor is not a legitimate
 password-reset operator, or where the target is a privileged/service account,
@@ -135,10 +142,12 @@ is the anomaly. Helpdesk staff reset ordinary user passwords routinely — so ra
 4724 volume is noisy — but the *pairing* (which account resets which) is where
 the signal lives. See `sigma/acl_forcechangepassword_reset.yml`.
 
-**Coverage note:** the *denied* attempt against `dadmin` also warrants
-detection — a failed privileged-target reset is itself suspicious. Depending on
-audit configuration this appears as a 4724 failure or an access-denied audit
-event; detecting attempts (not just successes) widens coverage.
+**Coverage gap:** the blocked attempt is silent. The denied reset against dadmin generated no attributable telemetry. This is by design: event 4724 records password resets that occur, and per Microsoft's documentation, "A Failure event does NOT generate if user gets 'Access Denied' while doing the password reset procedure." Since AdminSDHolder refuses jsmith's reset at the access-control check, no 4724 of either result type is produced.
+
+Placing a SACL on the protected account to audit failed access would surface the denied attempt as a 4662 (Directory Service Access) Audit Failure.
+
+Searching the Security log for events targeting dadmin confirms this: only setup activity (by Administrator) and AdminSDHolder's own SDProp stamping (logged as ANONYMOUS LOGON / S-1-5-7, all changed-attributes empty) appear.
+
 
 ---
 
@@ -147,7 +156,7 @@ event; detecting attempts (not just successes) widens coverage.
 | Activity | Log source | Event ID | Key fields | Status |
 |---|---|---|---|---|
 | Delegated password reset (success) | DC Security | 4724 | `Account_Name=jsmith`, `Target_User_Name=svc-report` | **Detected** — `sigma/acl_forcechangepassword_reset.yml` |
-| Reset attempt vs. protected acct (denied) | DC Security | 4724 (fail) / access-denied | actor=jsmith, target=dadmin | Design — detect attempts, not just successes |
+| Reset attempt vs. protected acct (denied) | DC Security | — | None — 4724 not generated on Access Denied | **Silent** — AdminSDHolder blocks pre-audit; not detectable via reset telemetry |
 | Attack-path discovery | (BloodHound, offline) | — | ForceChangePassword edge | N/A — attacker-side |
 
 ---
@@ -159,13 +168,11 @@ event; detecting attempts (not just successes) widens coverage.
    account-takeover. Realistic and common; the fix is tightly scoped delegation
    (only over the specific OUs/accounts helpdesk should manage).
 
-2. **AdminSDHolder protects privileged accounts from this — and BloodHound does
+2. **AdminSDHolder protects privileged accounts from this and BloodHound does
    not reflect it.** The path to `dadmin` appeared in the graph but was not
-   exploitable, because SDProp overrides delegated ACEs on protected accounts.
-   Lesson: validate BloodHound paths against protected-account status
-   (`adminCount=1`) before assuming exploitability. This is also a defensive
-   control — keeping privileged accounts in protected groups blunts ACL-based
-   escalation against them directly.
+   exploitable, because SDProp overrides delegated ACEs on protected accounts.  
+   Confirmed two ways: statically (adminCount=1 on dadmin) and dynamically (SDProp's periodic re-stamping visible as ANONYMOUS LOGON 4738 events on dadmin).  
+   Lesson: validate BloodHound paths against protected-account status before assuming exploitability. This is also a defensive control — keeping privileged accounts in protected groups blunts ACL-based escalation against them directly.
 
 3. **Detection is about the pairing, not the event.** 4724 is common (helpdesk
    resets passwords all day); the signal is anomalous actor/target pairs, not
