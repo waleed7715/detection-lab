@@ -220,7 +220,7 @@ by fields alone** from the benign `svc-legacyapp` requests, which are also
 successful `0x17`. That collision is the core detection problem this section
 works through.
 
-See [Sigma Rule](../sigma/kerberoast_rc4_success_baseline.yml).
+See [Sigma Rule](../../sigma/kerberoast_rc4_success_baseline.yml).
 
 ```
 index=wineventlog source="WinEventLog:Security" EventCode=4769 Ticket_Encryption_Type="0x17" Failure_Code="0x0"
@@ -241,7 +241,7 @@ This is a pure field match with zero benign overlap — legitimate RC4 (the
 legacy account) *succeeds* and never produces `0xe`. Validated against live
 telemetry: the search returned only the attack attempts, no benign hits.
 
-See [Sigma Rule](../sigma/kerberoast_etype_downgrade_failure.yml).
+See [Sigma Rule](../../sigma/kerberoast_etype_downgrade_failure.yml).
 
 ```
 index=wineventlog source="WinEventLog:Security" EventCode=4769 Ticket_Encryption_Type="0xffffffff" Failure_Code="0xe"

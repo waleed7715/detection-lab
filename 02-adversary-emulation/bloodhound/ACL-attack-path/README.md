@@ -140,7 +140,7 @@ Shows `jsmith` resetting `svc-report`.
 password-reset operator, or where the target is a privileged/service account,
 is the anomaly. Helpdesk staff reset ordinary user passwords routinely — so raw
 4724 volume is noisy — but the *pairing* (which account resets which) is where
-the signal lives. See `sigma/acl_forcechangepassword_reset.yml`.
+the signal lives. See [Sigma Rule](../../../sigma/acl_forcechangepassword_reset.yml).
 
 **Coverage gap:** the blocked attempt is silent. The denied reset against dadmin generated no attributable telemetry. This is by design: event 4724 records password resets that occur, and per Microsoft's documentation, "A Failure event does NOT generate if user gets 'Access Denied' while doing the password reset procedure." Since AdminSDHolder refuses jsmith's reset at the access-control check, no 4724 of either result type is produced.
 
@@ -155,7 +155,7 @@ Searching the Security log for events targeting dadmin confirms this: only setup
 
 | Activity | Log source | Event ID | Key fields | Status |
 |---|---|---|---|---|
-| Delegated password reset (success) | DC Security | 4724 | `Account_Name=jsmith`, `Target_User_Name=svc-report` | **Detected** — `sigma/acl_forcechangepassword_reset.yml` |
+| Delegated password reset (success) | DC Security | 4724 | `Account_Name=jsmith`, `Target_User_Name=svc-report` | **Detected** — [Sigma Rule](../../../sigma/acl_forcechangepassword_reset.yml) |
 | Reset attempt vs. protected acct (denied) | DC Security | — | None — 4724 not generated on Access Denied | **Silent** — AdminSDHolder blocks pre-audit; not detectable via reset telemetry |
 | Attack-path discovery | (BloodHound, offline) | — | ForceChangePassword edge | N/A — attacker-side |
 

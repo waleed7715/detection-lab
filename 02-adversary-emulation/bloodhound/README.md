@@ -227,7 +227,7 @@ the collection window. The single 4662 present was `DC01$` internal replication
 
 ---
 
-For Actual graph analysis using bloodhound to find the shortest path from `jsmith` to Domain Admin, see [ACL-attack-path/README](ACL-attack-path/README).
+For Actual graph analysis using bloodhound to find the shortest path from `jsmith` to Domain Admin, see [ACL-attack-path/README](./ACL-attack-path/README.md).
 
 ---
 
