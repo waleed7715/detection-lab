@@ -1,6 +1,7 @@
 title: Active Directory Discovery via Built-in Utilities
 id: a7535440-6d3d-4817-ad6b-c15ae3a3d062
 status: experimental
+
 description: |
   Detects domain reconnaissance using built-in Windows utilities. An unprivileged
   domain user can enumerate all accounts, privileged group membership, domain
@@ -12,46 +13,47 @@ description: |
   configuration, and nltest performs a DNS SRV lookup plus a DC locator RPC call
   that produces nothing security-relevant. Endpoint process telemetry is the only
   reliable source.
+
 references:
-  - https://attack.mitre.org/techniques/T1087/002/
-  - https://attack.mitre.org/techniques/T1069/002/
-  - https://attack.mitre.org/techniques/T1018/
-  - https://attack.mitre.org/techniques/T1482/
-  - https://learn.microsoft.com/en-us/windows/security/threat-protection/security-policy-settings/network-access-restrict-clients-allowed-to-make-remote-sam-calls
+- https://attack.mitre.org/techniques/T1087/002/
+- https://attack.mitre.org/techniques/T1069/002/
+- https://attack.mitre.org/techniques/T1018/
+- https://attack.mitre.org/techniques/T1482/
+- https://learn.microsoft.com/en-us/windows/security/threat-protection/security-policy-settings/network-access-restrict-clients-allowed-to-make-remote-sam-calls
+
 author: Waleed Hussain
 date: 2026/09/19
 tags:
-  - attack.discovery
-  - attack.t1087.002
-  - attack.t1069.002
-  - attack.t1018
-  - attack.t1482
+- attack.discovery
+- attack.t1087.002
+- attack.t1069.002
+- attack.t1018
+- attack.t1482
 logsource:
   product: windows
   category: process_creation
+
 detection:
   selection_net_image:
     Image|endswith:
-      - '\net.exe'
-      - '\net1.exe'
+    - '\net.exe'
+    - '\net1.exe'
   selection_net_domain:
-    CommandLine|contains: '/domain'
+    CommandLine|contains: "/domain"
   selection_net_verb:
     CommandLine|contains:
-      - 'user'
-      - 'group'
-      - 'localgroup'
+    - "user"
+    - "group"
+    - "localgroup"
   selection_nltest:
     Image|endswith: '\nltest.exe'
     CommandLine|contains:
-      - '/dclist'
-      - '/domain_trusts'
-      - '/all_trusts'
-      - '/dsgetdc'
-      - '/parentdomain'
-  # net.exe re-executes itself as net1.exe, producing two process-creation
-  # events per invocation. Exclude the child only when its parent is net.exe,
-  # so an attacker calling net1.exe directly is still detected.
+    - "/dclist"
+    - "/domain_trusts"
+    - "/all_trusts"
+    - "/dsgetdc"
+    - "/parentdomain"
+
   filter_net1_wrapper:
     Image|endswith: '\net1.exe'
     ParentImage|endswith: '\net.exe'
@@ -59,17 +61,17 @@ detection:
     (
       (selection_net_image and selection_net_domain and selection_net_verb)
       or selection_nltest
-    )
-    and not filter_net1_wrapper
+    ) and not filter_net1_wrapper
+
 fields:
-  - ParentImage
-  - Image
-  - CommandLine
-  - User
-  - ComputerName
+- ParentImage
+- Image
+- CommandLine
+- User
+- ComputerName
 falsepositives:
-  - Logon scripts and administrative scripts that query group membership
-  - Systems management and inventory agents
-  - Help desk tooling invoked by support staff
-  - Domain troubleshooting by administrators
+- Logon scripts and administrative scripts that query group membership
+- Systems management and inventory agents
+- Help desk tooling invoked by support staff
+- Domain troubleshooting by administrators
 level: low

@@ -21,7 +21,7 @@ false positive with a real benign account, then shows the refined logic that
 separates attack from normal activity with zero overlap — and states the
 boundary where that logic stops working.
 
-**Headline finding** A Kerberoasting attempt that
+**Headline finding** — A Kerberoasting attempt that
 *fails* is trivially detectable with high fidelity: an RC4 request refused by a
 hardened (AES-only) account produces a `Failure_Code=0xe` event with no benign
 explanation. But a Kerberoasting attempt that *succeeds* against an account

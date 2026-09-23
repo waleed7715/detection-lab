@@ -15,17 +15,17 @@ description: |
   maintaining that allow-list. For the patient single-ticket roast of a
   legitimately-RC4 account, no signature suffices; that requires behavioral
   baselining.
-  
+
 references:
-  - https://attack.mitre.org/techniques/T1558/003/
-  - https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4769
+- https://attack.mitre.org/techniques/T1558/003/
+- https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4769
 
 author: Waleed
 date: 2026-09-22
 
 tags:
-  - attack.credential_access
-  - attack.t1558.003
+- attack.credential_access
+- attack.t1558.003
 
 logsource:
   product: windows
@@ -34,13 +34,11 @@ logsource:
 detection:
   selection:
     EventID: 4769
-    Ticket_Encryption_Type: '0x17'   # RC4-HMAC
+    Ticket_Encryption_Type: "0x17" # RC4-HMAC
   filter_failures:
-    Failure_Code: '0x0'
+    Failure_Code: "0x0"
   condition: selection and filter_failures
 
 falsepositives:
-  - EXPECTED AND SUBSTANTIAL. Fires on all legitimate RC4 service usage,
-    including genuinely RC4-only service accounts. This is the point of the
-    rule — it is not deployable as-is.
+- EXPECTED AND SUBSTANTIAL. Fires on all legitimate RC4 service usage, including genuinely RC4-only service accounts. This is the point of the rule — it is not deployable as-is.
 level: informational
