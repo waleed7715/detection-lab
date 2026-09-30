@@ -12,14 +12,17 @@ The emphasis is on detection logic and its limits, not on tool deployment.
 |---|---------|-----------|
 | 01 | [AD Telemetry Pipeline & Discovery Detection](./01-ad-telemetry-discovery/) | T1087.002, T1069.002 |
 | 02 | [Adversary Emulation & Attack Path Mapping](./02-adversary-emulation/) | T1558.003, T1087.002, T1098 |
-| 03 | False Positive Tuning | Baseline analysis, rule refinement |
-| 04 | Malware Analysis & Rule Authoring | YARA, Sigma, static/dynamic analysis |
-| 05 | Network Detection | Zeek, Suricata, C2 identification |
+| 03 | [Malware Analysis & Rule Authoring](./03-malware-analysis/) | YARA, RC4/AES config extraction, static/dynamic RE |
+| 04 | Network Detection | Zeek, Suricata, C2 identification |
 
 Project 02 covers three related techniques:
 - [Kerberoasting: Detection Across Encryption States](./02-adversary-emulation/kerberoasting/) — T1558.003
 - [BloodHound Collection Detection](./02-adversary-emulation/bloodhound/) — T1087.002, T1069.002
 - [ACL Attack Path: Delegated Password Reset](./02-adversary-emulation/bloodhound/ACL-attack-path/) — T1098
+
+Project 03 covers two malware families across managed and native code:
+- [AsyncRAT / XWorm (.NET)](./03-malware-analysis/asyncrat-xworm/) — AES config extraction, obfuscation and packer handling, YARA authoring
+- [Remcos (native C++)](./03-malware-analysis/remcos/) — RC4 config decryption reversed in IDA, YARA authoring
 
 ---
 
@@ -36,10 +39,14 @@ The SIEM runs on **separate physical hardware** rather than as a VM on the same 
 
 ## Detection rules
 
-Portable [Sigma](https://github.com/SigmaHQ/sigma) rules live in [`/sigma`](./sigma/). Backend-specific searches appear in each project writeup.
+Portable [Sigma](https://github.com/SigmaHQ/sigma) rules live in [`/sigma`](./sigma/) and [YARA](https://github.com/virustotal/yara) rules live in [`/yara`](./yara/). Backend-specific searches appear in each project writeup.
 
-| Rule | Technique | Level |
+| Rule | Technique / Family | Type |
 |------|-----------|-------|
-| [`net_domain_discovery.yml`](./sigma/net_domain_discovery.yml) | T1087.002, T1069.002 | low |
+| [`net_domain_discovery.yml`](./sigma/net_domain_discovery.yml) | T1087.002, T1069.002 | Sigma |
+| [`xworm.yar`](./03-malware-analysis/asyncrat-xworm/xworm.yar) | XWorm | YARA |
+| [`asyncrat.yar`](./03-malware-analysis/asyncrat-xworm/asyncrat.yar) | AsyncRAT | YARA |
+| [`remcos.yar`](./03-malware-analysis/remcos/remcos.yar) | Remcos | YARA |
 
 ---
+
