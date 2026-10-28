@@ -1,0 +1,82 @@
+{
+  "_index": "wazuh-alerts-4.x-2026.10.25",
+  "_id": "a5HDdKEB6gyAVu3CDLeN",
+  "_score": null,
+  "_source": {
+    "input": {
+      "type": "log"
+    },
+    "agent": {
+      "ip": "10.10.10.100",
+      "name": "WS01",
+      "id": "003"
+    },
+    "manager": {
+      "name": "wazuh01"
+    },
+    "data": {
+      "win": {
+        "eventdata": {
+          "product Name": "Microsoft Defender Antivirus",
+          "product Version": "4.18.26090.9"
+        },
+        "system": {
+          "eventID": "5001",
+          "keywords": "0x8000000000000000",
+          "providerGuid": "{11cd958a-c507-4ef3-b3f2-5fd9dfbd2c78}",
+          "level": "4",
+          "channel": "Microsoft-Windows-Windows Defender/Operational",
+          "opcode": "0",
+          "message": "\"Microsoft Defender Antivirus Real-time Protection scanning for malware and other potentially unwanted software was disabled.\"",
+          "version": "0",
+          "systemTime": "2026-10-25T20:31:39.0479947Z",
+          "eventRecordID": "813",
+          "threadID": "3280",
+          "computer": "WS01.soc.lab",
+          "task": "0",
+          "processID": "3576",
+          "severityValue": "INFORMATION",
+          "providerName": "Microsoft-Windows-Windows Defender"
+        }
+      }
+    },
+    "rule": {
+      "firedtimes": 2,
+      "mail": true,
+      "level": 12,
+      "description": "Defender real-time protection disabled on ",
+      "groups": [
+        "local",
+        "windows",
+        "defender_tamper"
+      ],
+      "mitre": {
+        "technique": [
+          "Disable or Modify Tools"
+        ],
+        "id": [
+          "T1562.001"
+        ],
+        "tactic": [
+          "Defense Evasion"
+        ]
+      },
+      "id": "100130"
+    },
+    "location": "EventChannel",
+    "decoder": {
+      "name": "windows_eventchannel"
+    },
+    "id": "1792960300.64956162",
+    "full_log": "{\"win\":{\"system\":{\"providerName\":\"Microsoft-Windows-Windows Defender\",\"providerGuid\":\"{11cd958a-c507-4ef3-b3f2-5fd9dfbd2c78}\",\"eventID\":\"5001\",\"version\":\"0\",\"level\":\"4\",\"task\":\"0\",\"opcode\":\"0\",\"keywords\":\"0x8000000000000000\",\"systemTime\":\"2026-10-25T20:31:39.0479947Z\",\"eventRecordID\":\"813\",\"processID\":\"3576\",\"threadID\":\"3280\",\"channel\":\"Microsoft-Windows-Windows Defender/Operational\",\"computer\":\"WS01.soc.lab\",\"severityValue\":\"INFORMATION\",\"message\":\"\\\"Microsoft Defender Antivirus Real-time Protection scanning for malware and other potentially unwanted software was disabled.\\\"\"},\"eventdata\":{\"product Name\":\"Microsoft Defender Antivirus\",\"product Version\":\"4.18.26090.9\"}}}",
+    "timestamp": "2026-10-25T20:31:40.521+0000"
+  },
+  "fields": {
+    "timestamp": [
+      "2026-10-25T20:31:40.521Z"
+    ]
+  },
+  "sort": [
+    1792960300521
+  ]
+}

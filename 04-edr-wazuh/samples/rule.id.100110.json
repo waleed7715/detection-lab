@@ -1,0 +1,187 @@
+{
+  "_index": "wazuh-alerts-4.x-2026.10.28",
+  "_id": "2yF5gKEB7IbnywdD-wdX",
+  "_score": null,
+  "_source": {
+    "syscheck": {
+      "uname_after": "Administrators",
+      "mtime_after": "2026-10-28T03:04:21",
+      "size_after": "256",
+      "win_perm_after": [
+        {
+          "allowed": [
+            "DELETE",
+            "READ_CONTROL",
+            "WRITE_DAC",
+            "WRITE_OWNER",
+            "SYNCHRONIZE",
+            "READ_DATA",
+            "WRITE_DATA",
+            "APPEND_DATA",
+            "READ_EA",
+            "WRITE_EA",
+            "EXECUTE",
+            "READ_ATTRIBUTES",
+            "WRITE_ATTRIBUTES",
+            [
+              "DELETE",
+              "READ_CONTROL",
+              "WRITE_DAC",
+              "WRITE_OWNER",
+              "SYNCHRONIZE",
+              "READ_DATA",
+              "WRITE_DATA",
+              "APPEND_DATA",
+              "READ_EA",
+              "WRITE_EA",
+              "EXECUTE",
+              "READ_ATTRIBUTES",
+              "WRITE_ATTRIBUTES"
+            ],
+            [
+              "READ_CONTROL",
+              "SYNCHRONIZE",
+              "READ_DATA",
+              "READ_EA",
+              "EXECUTE",
+              "READ_ATTRIBUTES"
+            ],
+            [
+              "DELETE",
+              "READ_CONTROL",
+              "SYNCHRONIZE",
+              "READ_DATA",
+              "WRITE_DATA",
+              "APPEND_DATA",
+              "READ_EA",
+              "WRITE_EA",
+              "EXECUTE",
+              "READ_ATTRIBUTES",
+              "WRITE_ATTRIBUTES"
+            ]
+          ],
+          "name": "Administrators"
+        },
+        {
+          "allowed": [
+            "DELETE",
+            "READ_CONTROL",
+            "WRITE_DAC",
+            "WRITE_OWNER",
+            "SYNCHRONIZE",
+            "READ_DATA",
+            "WRITE_DATA",
+            "APPEND_DATA",
+            "READ_EA",
+            "WRITE_EA",
+            "EXECUTE",
+            "READ_ATTRIBUTES",
+            "WRITE_ATTRIBUTES"
+          ],
+          "name": "SYSTEM"
+        },
+        {
+          "allowed": [
+            "READ_CONTROL",
+            "SYNCHRONIZE",
+            "READ_DATA",
+            "READ_EA",
+            "EXECUTE",
+            "READ_ATTRIBUTES"
+          ],
+          "name": "Users"
+        },
+        {
+          "allowed": [
+            "DELETE",
+            "READ_CONTROL",
+            "SYNCHRONIZE",
+            "READ_DATA",
+            "WRITE_DATA",
+            "APPEND_DATA",
+            "READ_EA",
+            "WRITE_EA",
+            "EXECUTE",
+            "READ_ATTRIBUTES",
+            "WRITE_ATTRIBUTES"
+          ],
+          "name": "Authenticated Users"
+        }
+      ],
+      "mode": "whodata",
+      "path": "c:\\financeshare\\invoice_146.txt.locked",
+      "sha1_after": "5b0dc0ff1e4f49061e6f5601a319ad14d653179a",
+      "audit": {
+        "process": {
+          "name": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+          "id": "10348"
+        },
+        "user": {
+          "name": "labadmin",
+          "id": "S-1-5-21-2029992358-3764198637-777344371-1001"
+        }
+      },
+      "attrs_after": [
+        "ARCHIVE"
+      ],
+      "uid_after": "S-1-5-32-544",
+      "event": "deleted",
+      "md5_after": "b4aec5af147a835e404b4352cae181d4",
+      "sha256_after": "1e2280fc94d33451db7b44b2b6ed68dc06bd20b465d7593e0c23041d4c26bf06"
+    },
+    "input": {
+      "type": "log"
+    },
+    "agent": {
+      "ip": "10.10.10.100",
+      "name": "WS01",
+      "id": "003"
+    },
+    "previous_output": "File 'c:\\financeshare\\invoice_145.txt.locked' deleted\nMode: whodata\n\nFile 'c:\\financeshare\\invoice_144.txt.locked' deleted\nMode: whodata\n\nFile 'c:\\financeshare\\invoice_143.txt.locked' deleted\nMode: whodata\n\nFile 'c:\\financeshare\\invoice_142.txt.locked' deleted\nMode: whodata\n\nFile 'c:\\financeshare\\invoice_141.txt.locked' deleted\nMode: whodata\n\nFile 'c:\\financeshare\\invoice_140.txt.locked' deleted\nMode: whodata\n\nFile 'c:\\financeshare\\invoice_14.txt.locked' deleted\nMode: whodata\n\nFile 'c:\\financeshare\\invoice_139.txt.locked' deleted\nMode: whodata\n\nFile 'c:\\financeshare\\invoice_138.txt.locked' deleted\nMode: whodata\n\nFile 'c:\\financeshare\\invoice_137.txt.locked' deleted\nMode: whodata\n\nFile 'c:\\financeshare\\invoice_136.txt.locked' deleted\nMode: whodata\n",
+    "manager": {
+      "name": "wazuh01"
+    },
+    "rule": {
+      "firedtimes": 16,
+      "mail": true,
+      "level": 13,
+      "description": "Possible ransomware: 40+ file changes in 30s on ",
+      "groups": [
+        "local",
+        "syscheck",
+        "ransomware"
+      ],
+      "mitre": {
+        "technique": [
+          "Data Encrypted for Impact"
+        ],
+        "id": [
+          "T1486"
+        ],
+        "tactic": [
+          "Impact"
+        ]
+      },
+      "id": "100110",
+      "frequency": 40
+    },
+    "location": "syscheck",
+    "decoder": {
+      "name": "syscheck_deleted"
+    },
+    "id": "1793156839.14787861",
+    "full_log": "File 'c:\\financeshare\\invoice_146.txt.locked' deleted\nMode: whodata\n",
+    "timestamp": "2026-10-28T03:07:19.134+0000"
+  },
+  "fields": {
+    "syscheck.mtime_after": [
+      "2026-10-28T03:04:21.000Z"
+    ],
+    "timestamp": [
+      "2026-10-28T03:07:19.134Z"
+    ]
+  },
+  "sort": [
+    1793156839134
+  ]
+}

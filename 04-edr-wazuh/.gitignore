@@ -1,0 +1,5 @@
+*.exe
+wazuh-passwords.txt
+wazuh-install-files.tar
+.env
+*_key*

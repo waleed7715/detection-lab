@@ -1,0 +1,8 @@
+Test,Host,RuleID,Result,LatencyS
+T1486 mass encryption,WS01,100110,PASS,2.4
+T1204.002 malware drop,WS01,100120,PASS,1.1
+T1204.002 malware drop,WS01,87105,PASS,3.8
+T1562.001 Defender tamper,WS01,100130,PASS,3.2
+T1562.001 Defender tamper,WS01,100132,PASS,3.2
+T1110.003 password spray,DC01,100140,PASS,38.9
+T1110.003 password spray,DC01,100141,PASS,55.2

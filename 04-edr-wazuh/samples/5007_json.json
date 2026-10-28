@@ -1,0 +1,83 @@
+{
+    "timestamp": "2026-10-25T20:17:37.637+0000",
+    "rule": {
+        "level": 5,
+        "description": "Windows Defender: Antimalware platform feature configuration changed",
+        "id": "62154",
+        "firedtimes": 2,
+        "mail": false,
+        "groups": [
+            "windows",
+            "windows_defender"
+        ],
+        "pci_dss": [
+            "5.1",
+            "10.2.6",
+            "10.6.1"
+        ],
+        "gpg13": [
+            "4.14",
+            "10.1"
+        ],
+        "gdpr": [
+            "IV_35.7.d",
+            "II_5.1.f"
+        ],
+        "hipaa": [
+            "164.312.b"
+        ],
+        "nist_800_53": [
+            "SI.3",
+            "AU.14",
+            "AU.5",
+            "AU.6"
+        ],
+        "tsc": [
+            "A1.2",
+            "CC6.8",
+            "CC7.2",
+            "CC7.3"
+        ]
+    },
+    "agent": {
+        "id": "003",
+        "name": "WS01",
+        "ip": "10.10.10.100"
+    },
+    "manager": {
+        "name": "wazuh01"
+    },
+    "id": "1792959457.60349589",
+    "full_log": "{\"win\":{\"system\":{\"providerName\":\"Microsoft-Windows-Windows Defender\",\"providerGuid\":\"{11cd958a-c507-4ef3-b3f2-5fd9dfbd2c78}\",\"eventID\":\"5007\",\"version\":\"0\",\"level\":\"4\",\"task\":\"0\",\"opcode\":\"0\",\"keywords\":\"0x8000000000000000\",\"systemTime\":\"2026-10-25T20:17:36.1637630Z\",\"eventRecordID\":\"800\",\"processID\":\"3576\",\"threadID\":\"4580\",\"channel\":\"Microsoft-Windows-Windows Defender/Operational\",\"computer\":\"WS01.soc.lab\",\"severityValue\":\"INFORMATION\",\"message\":\"\\\"Microsoft Defender Antivirus Configuration has changed. If this is an unexpected event you should review the settings as this may be the result of malware.\\r\\n \\tOld value: \\r\\n \\tNew value: HKLM\\\\SOFTWARE\\\\Microsoft\\\\Windows Defender\\\\Exclusions\\\\Paths\\\\C:\\\\Windows\\\\Temp\\\\stage = 0x0\\\"\"},\"eventdata\":{\"product Name\":\"Microsoft Defender Antivirus\",\"product Version\":\"4.18.26090.9\",\"new Value\":\"HKLM\\\\\\\\SOFTWARE\\\\\\\\Microsoft\\\\\\\\Windows Defender\\\\\\\\Exclusions\\\\\\\\Paths\\\\\\\\C:\\\\\\\\Windows\\\\\\\\Temp\\\\\\\\stage = 0x0\"}}}",
+    "decoder": {
+        "name": "windows_eventchannel"
+    },
+    "data": {
+        "win": {
+            "system": {
+                "providerName": "Microsoft-Windows-Windows Defender",
+                "providerGuid": "{11cd958a-c507-4ef3-b3f2-5fd9dfbd2c78}",
+                "eventID": "5007",
+                "version": "0",
+                "level": "4",
+                "task": "0",
+                "opcode": "0",
+                "keywords": "0x8000000000000000",
+                "systemTime": "2026-10-25T20:17:36.1637630Z",
+                "eventRecordID": "800",
+                "processID": "3576",
+                "threadID": "4580",
+                "channel": "Microsoft-Windows-Windows Defender/Operational",
+                "computer": "WS01.soc.lab",
+                "severityValue": "INFORMATION",
+                "message": "\"Microsoft Defender Antivirus Configuration has changed. If this is an unexpected event you should review the settings as this may be the result of malware.\r\n \tOld value: \r\n \tNew value: HKLM\\SOFTWARE\\Microsoft\\Windows Defender\\Exclusions\\Paths\\C:\\Windows\\Temp\\stage = 0x0\""
+            },
+            "eventdata": {
+                "product Name": "Microsoft Defender Antivirus",
+                "product Version": "4.18.26090.9",
+                "new Value": "HKLM\\\\SOFTWARE\\\\Microsoft\\\\Windows Defender\\\\Exclusions\\\\Paths\\\\C:\\\\Windows\\\\Temp\\\\stage = 0x0"
+            }
+        }
+    },
+    "location": "EventChannel"
+}

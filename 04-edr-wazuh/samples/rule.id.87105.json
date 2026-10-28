@@ -1,0 +1,78 @@
+{
+  "_index": "wazuh-alerts-4.x-2026.10.27",
+  "_id": "aYJgfqEBGEjbC23g_Cn8",
+  "_score": null,
+  "_source": {
+    "input": {
+      "type": "log"
+    },
+    "agent": {
+      "ip": "10.10.10.100",
+      "name": "WS01",
+      "id": "003"
+    },
+    "manager": {
+      "name": "wazuh01"
+    },
+    "data": {
+      "integration": "virustotal",
+      "virustotal": {
+        "sha1": "3395856ce81f2b7382dee72602f798b642f14140",
+        "malicious": "1",
+        "total": "65",
+        "found": "1",
+        "positives": "62",
+        "source": {
+          "sha1": "3395856ce81f2b7382dee72602f798b642f14140",
+          "file": "c:\\labdrop\\invoice_update_20261027132037.exe",
+          "alert_id": "1793121637.59977692",
+          "md5": "44d88612fea8a8f36de82e1278abb02f"
+        },
+        "permalink": "https://www.virustotal.com/gui/file/275a021bbfb6489e54d471899f7db9d1663fc695ec2fe2a2c4538aabf651fd0f/detection/f-275a021bbfb6489e54d471899f7db9d1663fc695ec2fe2a2c4538aabf651fd0f-1793121269",
+        "scan_date": "2026-10-27 17:14:29"
+      }
+    },
+    "rule": {
+      "firedtimes": 1,
+      "mail": true,
+      "level": 12,
+      "pci_dss": [
+        "10.6.1",
+        "11.4"
+      ],
+      "description": "VirusTotal: Alert - c:\\labdrop\\invoice_update_20261027132037.exe - 62 engines detected this file",
+      "groups": [
+        "virustotal"
+      ],
+      "mitre": {
+        "technique": [
+          "Exploitation for Client Execution"
+        ],
+        "id": [
+          "T1203"
+        ],
+        "tactic": [
+          "Execution"
+        ]
+      },
+      "id": "87105",
+      "gdpr": [
+        "IV_35.7.d"
+      ]
+    },
+    "location": "virustotal",
+    "decoder": {
+      "name": "json"
+    },
+    "id": "1793121640.59994112",
+    "timestamp": "2026-10-27T17:20:40.038+0000"
+  },
+  "fields": {
+    "timestamp": [
+      "2026-10-27T17:20:40.038Z"
+    ]
+  },
+  "sort": [
+    1793121640038
+  ]
+}
